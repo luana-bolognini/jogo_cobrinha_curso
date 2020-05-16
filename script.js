@@ -34,8 +34,40 @@ function criarCobrinha(){ //vamos trabalhar com for pra criar a cobrinha, vai pe
 }
 
 
-//FUNÇÃO INICIAR JOGO//
+//EVENTO PARA RECEBER OS COMANDOS DO JOGADOR, EVENT LISTENER//
+//pega um evento de click do teclado para alterar a movimentação da cobrinha//
+//a numeração do teclado é que faz essa referência
+document.addEventListener('keydown', update);
+function update (event){
+    //esses ifs garantem que ela não vai add na direção contrária, por isso os && - pra não ficar com duas cabeças
+    //o nossos não é daqueles que a cabeça volta
+    //e ainda settam no final, pra onde ela vai se mover
+
+    //FUNCIONAMENTO//você vai apertar uma tecla, o EventListener vai chamar o update e passar como argumento o evento de tecla que chamamos, de 37 a 40, como definido
+    if(event.keyCode == 37 && direction != "right") direction = "left";
+    if(event.keyCode == 38 && direction != "down") direction = "up";
+    if(event.keyCode == 39 && direction != "left") direction = "right";
+    if(event.keyCode == 40 && direction != "up") direction = "down";
+
+
+}
+
+
+
+
+
+
+//FUNÇÃO INICIAR JOGO - DEFINIÇÃO DA MOVIMENTAÇÃO DA COBRINHA//
+//lembrando que é um plano cartesiano, temos de 0 a 16, nessa função vamos inserir o funcionalidade de ela atravessar as paredes e aparecer do outro lado, pra não simplesmente sumir pelo plano indefinidamente; mudamos a propriedade dela quando ela chega nos extremos
+//quando ela passar de qualquer lado do canvas a gente vai alterar o valor da posição, pra ela aparecer do outro lado
 function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie corretamente
+
+    //FAZENDO A COBRINHA PASSAR DE UMA PAREDE PARA OUTRA: ALTERANDO PROPRIEDADES AO ATINGIR OS EXTREMOS
+    if(snake[0].x > 15 * box && direction == "right") snake[0].x = 0;
+    if(snake[0].x < 0 && direction == "left") snake[0].x = 16 * box;
+    if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
+    if(snake[0].y < 0 && direction == "up") snake[0].y = 16 * box;
+
 
     criarBG();
     criarCobrinha();
@@ -71,3 +103,4 @@ let jogo= setInterval(iniciarJogo,100); //esse comando faz a renovação a cada 
 //agora precisamos settar os movimentos da cobrinha, pra fazer o jogo direito; para isso precisamos criar variável pra movimentação dela
 
 //estabelecer função para movimentação, para parar o jogo
+
