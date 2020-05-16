@@ -84,11 +84,21 @@ function update (event){
 //quando ela passar de qualquer lado do canvas a gente vai alterar o valor da posição, pra ela aparecer do outro lado
 function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie corretamente
 
-    //FAZENDO A COBRINHA PASSAR DE UMA PAREDE PARA OUTRA: ALTERANDO PROPRIEDADES AO ATINGIR OS EXTREMOS
+        //FAZENDO A COBRINHA PASSAR DE UMA PAREDE PARA OUTRA: ALTERANDO PROPRIEDADES AO ATINGIR OS EXTREMOS
     if(snake[0].x > 15 * box && direction == "right") snake[0].x = 0;
     if(snake[0].x < 0 && direction == "left") snake[0].x = 16 * box;
     if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
     if(snake[0].y < 0 && direction == "up") snake[0].y = 16 * box;
+
+    //FUNÇÃO PARA FINALIZAR O JOGO//
+    //criar um for pra comparar se a cabeça está se chocando contra qualquer posição, acionando o alert pra finalizar
+    for (i=1; i<snake.length; i++){ //começamos no 1 porque ela já começa com cabeça, snake.lenght é o tamanho atual do array e depois incrementa
+        if(snake[0].x == snake[i].x && snake[0].y == snnake[i].y){ //se a posição da cabeça, qualquer parte do corpinho, índice i, vamos parar o jogo
+            clearInterval(jogo); //essa função já tinha sido estabelecida com 100ms anteriormente, nesse ponto fazemos com que a função de jogo seja terminada
+            alert('Game Over :(');
+        }
+
+    }
 
 
     criarBG();
@@ -108,7 +118,7 @@ function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie 
 
 
      //APAGAR FINAL DA COBRINHA
-     // //a função pop é a que retira o último elemento do nosso array
+     //snake.pop(); //a função pop é a que retira o último elemento do nosso array, que entrou na parte da comidinha
 
 
     //CONJUNTO DE CONDIÇÕES PARA QUE A COBRINHA CRESÇA AO COMER A COMIDINHA//
@@ -121,6 +131,8 @@ function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie 
         food.x = Math.floor(Math.random() * 15 + 1) * box;
         food.y = Math.floor(Math.random() * 15 + 1) * box;
     }
+
+
 
 
 
