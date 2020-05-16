@@ -1,6 +1,7 @@
 //na organização temos em primeiro lugar as definições, feitas pouco a pouco, depois a definição/descrição das funções e por fim as chamadas de funções
+//todas as funções das partes do jogo serão chamadas dentro da função IniciarJogo
 
-
+//DEFINIÇÕES//
 let canvas = document.getElementById("snake"); //selecionamos a id que colocamos no index
 let context = canvas.getContext("2d"); //o contexto renderiza o desenho que vai ter o canvas, aqui será um plano 2d
 let box = 32; //cada quadradinho vai ter 32 pixels
@@ -10,6 +11,18 @@ snake[0]={ //estabelecendo o tamanho pra poder trabalhar com o for lá na funç�
     y: 8 * box
 }
 let direction = "right"; //primeira definição de direção da cobrinha
+
+//Definição da comidinha//
+let food = {//criando array de comidinha, a ser usado na função drawFood
+//não queremos que a comida apareça sempre no mesmo lugar, pra isso vamos usar dois métodos pra criar números aleatórios
+//Math.floor: retira a parte flutuante do número gerado pelo random, ou seja, o 0,...
+//Math.random: retorna sempre um número aleatório até 1
+//ou seja, nos comandos abaixo, o tamanho do canvas está settado como 16, e o número aleatório vai multiplicar esse tamanho em x e y pra que apareça na coordenada correta
+
+    x: Math.floor(Math.random() * 15 + 1) * box,
+    y: Math.floor(Math.random() * 15 + 1) * box
+}
+
 
 
 //FUNÇÃO CRIAR BACKGROUND//
@@ -32,6 +45,15 @@ function criarCobrinha(){ //vamos trabalhar com for pra criar a cobrinha, vai pe
     }
 
 }
+
+
+//DESENHAR A COMIDINHA//
+//passando novamente elementos de contexto
+function drawFood(){
+    context.fillStyle = 'red';
+    context.fillRect(food.x, food.y, box, box); //as coordenadas do food e o tamanho do quadradinho, que sempre deve estar presente
+}
+
 
 
 //EVENTO PARA RECEBER OS COMANDOS DO JOGADOR, EVENT LISTENER//
@@ -71,6 +93,7 @@ function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie 
 
     criarBG();
     criarCobrinha();
+    drawFood ();
 
     let snakeX= snake[0].x;
     let snakeY= snake[0].y;
@@ -83,8 +106,23 @@ function iniciarJogo(){ //aqui vamos passar as outras funções para que inicie 
     if (direction == "up") snakeY -= box;
     if (direction == "down") snakeY += box;
 
-    //APAGAR FINAL DA COBRINHA
-    snake.pop(); //a função pop é a que retira o último elemento do nosso array
+
+     //APAGAR FINAL DA COBRINHA
+     // //a função pop é a que retira o último elemento do nosso array
+
+
+    //CONJUNTO DE CONDIÇÕES PARA QUE A COBRINHA CRESÇA AO COMER A COMIDINHA//
+    //verificando a posição da cobrinha; caso a posição da cobrinha
+    //caso a posição x,y da cobrinha seja diferente da posição x,y da comidinha, ela vai retirar o último elemento da cobrinha
+    //caso seja igual, ela vai aumentar e a gente vai passar de novo a função de girar a comidinha, e quando ela passar por cima a comidinha aparecer em outro lugar
+    if(snakeX != food.x || snakeY != food.y){ //a função pop é ativada, pra perder um pedaço da cobrinha
+        snake.pop();
+    }else{ //a comidinha recebe um novo ponto aleatório
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
+    }
+
+
 
     //ADICIONAR CABEÇA DA COBRINHA
     let newHead = {
